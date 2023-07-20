@@ -1,0 +1,6 @@
+@import '@fontsource/ubuntu/index.css';
+@import "@mdi/font/css/materialdesignicons.css";
+
+html, body {
+    font-family: "Ubuntu", sans-serif !important;
+}
