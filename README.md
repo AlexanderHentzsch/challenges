@@ -1,6 +1,6 @@
 ### Challenges
 
-Mit dieser kleinen App kann man sich selbst Ziele setzen und diese Verfolgen.
+Mit dieser kleinen App kann man sich selbst Ziele setzen und verfolgen.
 
 #### Funktionsumfang
 
