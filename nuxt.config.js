@@ -24,7 +24,7 @@ export default {
       {name: 'format-detection', content: 'telephone=no'},
     ],
     link: [
-      {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'},
+      {rel: 'icon', type: 'image/x-icon', href: '/icon.png'},
     ],
     script: [
       //{src: '/onConsentUpdate.js', type: 'text/plain', 'data-usercentrics': 'Firebase Authentication'},
@@ -41,6 +41,7 @@ export default {
   router: {
     middleware: ['default'],
     mode: 'history',
+    base: '/challenges/',
   },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -79,16 +80,16 @@ export default {
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
-    // icon: {
-    //   source: '~/static/icon.png',
-    //   fileName: 'icon.png',
-    //   sizes: [64, 120, 144, 152, 192, 384, 512],
-    //   targetDir: 'icons',
-    //   plugin: true,
-    //   pluginName: '$icon',
-    //   purpose: ['any'],
-    //   cacheDir: '~/node_modules/.cache/pwa/icon',
-    // },
+    icon: {
+      source: '~/static/icon.png',
+      fileName: 'icon.png',
+      sizes: [64, 120, 144, 152, 192, 384, 512],
+      targetDir: 'icons',
+      plugin: true,
+      pluginName: '$icon',
+      purpose: ['any'],
+      cacheDir: '~/node_modules/.cache/pwa/icon',
+    },
     meta: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
@@ -97,7 +98,7 @@ export default {
       favicon: true,
       name: '1AHentzsch',
       author: 'Alexander Hentzsch',
-      description: 'Private website of Alexander Hentzsch',
+      description: 'Mit dieser kleinen App kann man sich selbst Ziele setzen und verfolgen.',
       theme_color: '#000000',
       lang: 'de',
       ogType: 'website',
@@ -124,7 +125,7 @@ export default {
     treeShake: true,
     defaultAssets: false,
     lang: {
-      locals: {de},
+      locales: {de},
       current: 'de',
     },
     theme: {
