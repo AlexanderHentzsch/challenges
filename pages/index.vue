@@ -2,6 +2,12 @@
   <v-container>
     <v-card class="mb-4">
       <v-card-title>
+        <v-img
+          src="/challenges/icon.png"
+          max-width="20px"
+          max-height="20px"
+          class="mr-2"
+        />
         Challenges
         <v-spacer/>
         <v-btn
