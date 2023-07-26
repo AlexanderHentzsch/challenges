@@ -22,6 +22,7 @@
           v-model="formular.count"
           outlined
           hide-details
+          @keyup.enter="createOrReplaceLog()"
         />
       </v-card-text>
       <v-card-actions class="pa-0">
