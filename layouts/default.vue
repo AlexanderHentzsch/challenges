@@ -11,3 +11,9 @@ export default {
   name: 'DefaultLayout',
 };
 </script>
+
+<style>
+.v-btn {
+    text-transform: inherit !important;
+}
+</style>
