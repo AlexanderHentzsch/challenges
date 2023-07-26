@@ -2,6 +2,12 @@
   <v-container>
     <v-card class="mb-4">
       <v-card-title>
+        <v-img
+          src="/challenges/icon.png"
+          max-width="20px"
+          max-height="20px"
+          class="mr-2"
+        />
         Challenges
         <v-spacer/>
         <v-btn
@@ -31,14 +37,34 @@
       <v-card-subtitle>
         Ziel: {{ challenge_getSum(c.logs) }}/{{ c.target }} | {{ getPendingDays(c) }}
       </v-card-subtitle>
+      <v-card-actions>
+        <v-spacer/>
+        <v-btn
+          @click="$store.dispatch('challenges/updateDetailLevel', {uuid: c.uuid, detailLevel: 'd'})"
+          :color="('d' === c.detailLevel) ? 'primary' : null"
+          elevation="0"
+          v-text="'d'"
+          rounded
+          small
+        />
+        <v-btn
+          @click="$store.dispatch('challenges/updateDetailLevel', {uuid: c.uuid, detailLevel: 'every'})"
+          :color="('every' === c.detailLevel) ? 'primary' : null"
+          v-text="'alle'"
+          elevation="0"
+          rounded
+          small
+        />
+      </v-card-actions>
       <v-card outlined>
         <v-data-table
           :headers="challengeHeaders"
-          :items="challenge_getDataTableItems(c)"
+          :items="$store.getters['challenges/logsByChallengeUuid'](c.uuid)"
           :mobile-breakpoint="0"
+          :key="$store.getters['challenges/detailLevelByChallengeUuid'](c.uuid)"
         >
           <template v-slot:item.edit="{ item }">
-            <v-btn @click="changeLog(c.uuid, item)" icon>
+            <v-btn v-if="c.detailLevel === 'every'" @click="changeLog(c.uuid, item)" icon>
               <v-icon v-text="'mdi-pencil'"/>
             </v-btn>
           </template>
@@ -147,7 +173,7 @@ export default {
       this.selectedUuid_challenge = uuidChallenge;
       this.selectedUuid_log = log.uuid;
       this.dialogs.addLog.show = true;
-    }
+    },
   },
 };
 </script>
