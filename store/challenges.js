@@ -16,6 +16,51 @@ export const getters = {
   valueByUuid: ({value}) => (uuid) => {
     return value.find(e => e.uuid === uuid);
   },
+  logsByChallengeUuid: ({value}) => (uuid) => {
+    const index = value.findIndex(e => e.uuid === uuid);
+    if (index === -1) {
+      console.error(`UUID nicht gefunden: ${uuid}`);
+      return;
+    }
+
+    const d = value[index];
+    const detailLevel = d.detailLevel;
+    if (detailLevel === 'every' || detailLevel === undefined) {
+      return cloneDeep(d.logs)
+        .sort((a, b) => a.date < b.date ? 1 : -1)
+        .map(e => {
+          e.date = DateTime.fromISO(e.date).setLocale('de').toFormat('EEE dd.MM.yyyy hh:mm');
+          return e;
+        });
+    }
+
+    const _r = d.logs.reduce((prev, cur) => {
+      const date = DateTime.fromISO(cur.date).setLocale('de').toFormat('EEE dd.MM.yyyy');
+      if (prev[date] === undefined)
+        prev[date] = 0;
+
+      prev[date] = prev[date] + parseInt(cur.count);
+      return prev;
+    }, {});
+
+    let r = [];
+    for (let key in _r) {
+      r.push({count: _r[key], date: key});
+    }
+    r = r.sort((a, b) => {
+      return DateTime.fromISO(a.date) < DateTime.fromISO(b.date) ? 1 : -1;
+    });
+    return r;
+  },
+  detailLevelByChallengeUuid: ({value}) => (uuid) => {
+    const index = value.findIndex(e => e.uuid === uuid);
+    if (index === -1) {
+      console.error(`UUID nicht gefunden: ${uuid}`);
+      return;
+    }
+
+    return value[index].detailLevel || 'every';
+  },
 };
 
 export const mutations = {
@@ -79,6 +124,21 @@ export const mutations = {
     value[indexChallenge].logs.splice(indexLog, 1);
     state.value = value;
   },
+  updateDetailLevel(state, {uuid, detailLevel}) {
+    const index = state.value.findIndex(e => e.uuid === uuid);
+    if (index === -1) {
+      console.error(`UUID nicht gefunden: ${uuid}`);
+      return;
+    }
+
+    const possibleTypes = ['d', 'every'];
+    if (possibleTypes.indexOf(detailLevel) === -1) {
+      console.error(`Ungültiger Detailgrad: ${detailLevel}`);
+      return;
+    }
+
+    state.value[index].detailLevel = detailLevel;
+  },
 };
 
 export const actions = {
@@ -100,6 +160,10 @@ export const actions = {
   },
   async deleteLog({commit, getters}, payload) {
     commit('deleteLog', payload);
+    await localforage.setItem(LOCALFORAGE_KEY, getters['value']);
+  },
+  async updateDetailLevel({commit, getters}, {uuid, detailLevel}) {
+    commit('updateDetailLevel', {uuid, detailLevel});
     await localforage.setItem(LOCALFORAGE_KEY, getters['value']);
   },
 };
